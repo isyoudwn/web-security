@@ -20,6 +20,7 @@
           <a href="/detail/<%=posts[i]._id%>" style = "color:black"><h4><%=posts[i].제목%></h4></a>
           <p><%=posts[i].날짜%></p>
           <button class = "delete btn btn-dark" data-id = "<%=posts[i]._id%>" type="button">삭제</button>
+          <button type="button" data-id = "<%=posts[i]._id%>" class="update btn btn-info">수정</button>
         </li>
         <% }%>
       </ul>
@@ -29,17 +30,21 @@
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script>
+      $('.update').click((e)=> {
+        let postNum = e.target.dataset.id;
+        window.location.href = `/update/${postNum}`;
+      });
 
       $('.delete').click(function(e){
-        var 글번호 = e.target.dataset.id;
-        var 지금누른거 = $(this); // 지금 이벤트 동작하는 곳
+        var postNum = e.target.dataset.id;
+        var clickNow = $(this); // 지금 이벤트 동작하는 곳
         $.ajax({
           method : 'DELETE', 
           url : '/delete',
-          data : {_id : 글번호}
-        }).done(function(결과){
+          data : {_id : postNum}
+        }).done(function(result){
           console.log('성공했어요');
-          지금누른거.parent('li').fadeOut();
+          clickNow.parent('li').fadeOut();
         }).fail(function(xhr, textStatus, errorThrown){
           console.log(xhr, textStatus, errorThrown);
           // textStatus 응답코드, errorThrown 에러 메세지
