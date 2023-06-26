@@ -13,11 +13,16 @@
   <body>
       <%- include('nav.html') %>
 
+      <div class = "container input-group mb-2 mt-4">
+        <input class = "form-control" id = "search-input">
+        <button class = "input-group-append btn btn-dark ml-2" id = "search">검색</button>
+      </div>
+
       <div class = "container">
       <ul class="list-group list-group-flush">
         <% for (let i = 0; i < posts.length; i++) { %>
         <li class="list-group-item">
-          <a href="/detail/<%=posts[i]._id%>" style = "color:black"><h4><%=posts[i].제목%></h4></a>
+          <a href="/list/detail/<%=posts[i]._id%>" style = "color:black"><h4><%=posts[i].제목%></h4></a>
           <p><%=posts[i].날짜%></p>
           <button class = "delete btn btn-dark" data-id = "<%=posts[i]._id%>" type="button">삭제</button>
           <button type="button" data-id = "<%=posts[i]._id%>" class="update btn btn-info">수정</button>
@@ -30,9 +35,14 @@
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script>
+      $('#search').click(()=>{
+          var inputValue = $('#search-input').val();
+          window.location.replace(`/list/search?value=${inputValue}`);
+        });
+
       $('.update').click((e)=> {
         let postNum = e.target.dataset.id;
-        window.location.href = `/update/${postNum}`;
+        window.location.href = `/list/update/${postNum}`;
       });
 
       $('.delete').click(function(e){
@@ -40,8 +50,8 @@
         var clickNow = $(this); // 지금 이벤트 동작하는 곳
         $.ajax({
           method : 'DELETE', 
-          url : '/delete',
-          data : {_id : postNum}
+          url : '/list/delete',
+          data : { _id : postNum }
         }).done(function(result){
           console.log('성공했어요');
           clickNow.parent('li').fadeOut();

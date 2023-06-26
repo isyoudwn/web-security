@@ -14,7 +14,7 @@
     <%- include('nav.html') %>
 
 
-      <form action="/update/<%=data._id%>?_method=PUT" method="POST">
+      <form action="/list/update/<%=data._id%>?_method=PUT" method="POST">
         <div class="form-group ml-4 mr-4 mt-5">
           <label for="todo">할일</label>
           <input type="text" class="form-control" value = "<%=data.제목%>" id="todo" name = "title" aria-describedby="todoHelp">
