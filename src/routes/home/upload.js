@@ -21,6 +21,7 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', upload.single('profile'),(req, res) => {
+    console.log(req)
     res.send('업로드 완료');
 });
 

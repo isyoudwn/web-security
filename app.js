@@ -9,6 +9,10 @@ const LocalStrategy = require('passport-local').Strategy;
 const session = require('express-session');
 const dotenv = require("dotenv");
 
+
+
+
+
 dotenv.config();
 
 app.set('views', './src/views/home');

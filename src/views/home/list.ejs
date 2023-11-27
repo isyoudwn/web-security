@@ -8,7 +8,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 
-    <title>Hello, world!</title>
+    <title>TRIP GOGO!</title>
   </head>
   <body>
       <%- include('nav.html') %>
@@ -22,10 +22,12 @@
       <ul class="list-group list-group-flush">
         <% for (let i = 0; i < posts.length; i++) { %>
         <li class="list-group-item">
-          <a href="/list/detail/<%=posts[i]._id%>" style = "color:black"><h4><%=posts[i].제목%></h4></a>
-          <p><%=posts[i].날짜%></p>
+          <a href="/list/detail/<%=posts[i]._id%>" style = "color:black"><h4><%- posts[i].제목%></h4></a>
+          <p><%- posts[i].날짜%></p>
+          <p><%- posts[i].작성자%></p>
           <button class = "delete btn btn-dark" data-id = "<%=posts[i]._id%>" type="button">삭제</button>
           <button type="button" data-id = "<%=posts[i]._id%>" class="update btn btn-info">수정</button>
+          <!-- <button type="button" data-id = "<%=posts[i].작성자%>" class="chat btn btn-info">채팅하기</button> -->
         </li>
         <% }%>
       </ul>
@@ -44,6 +46,8 @@
         let postNum = e.target.dataset.id;
         window.location.href = `/list/update/${postNum}`;
       });
+
+
 
       $('.delete').click(function(e){
         var postNum = e.target.dataset.id;

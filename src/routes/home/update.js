@@ -5,6 +5,6 @@ const ctrl = require('../../controllers/home/boardController');
 router.get('/:id', ctrl.output.update);
 
 /**수정 API */
-router.put('/:id', ctrl.pro.update);
+router.post('/:id', ctrl.pro.update);
 
 module.exports = router;

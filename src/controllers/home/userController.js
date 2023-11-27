@@ -30,9 +30,6 @@ const pro = {
             res.redirect('/');
           });
         }
-        else {
-          res.redirect('/').send({message : '이미 존재하는 아이디입니다.'});
-        }
       })
     }
 }

@@ -26,7 +26,6 @@ const output = {
     update : (req, res)=> {
         let postNum = parseInt(req.params.id);
         db.collection('post').findOne({ _id : postNum }, (err, result) => {
-            console.log(result);
             res.render('update.ejs', { data : result });
         });
     },
@@ -45,15 +44,32 @@ const output = {
         ];
     
         db.collection('post').aggregate(search).toArray((err, result) => {
-          console.log(result);
           res.render("list.ejs", { posts : result });
         });
       },
       /** todo 작성페이지 랜더링 */
       write : (req, res) => {
         res.render('write.ejs');
+    },
+    /** chat룸 랜더링 */
+    chat : (req, res) => {
+        db.collection('chatroom').find({member : req.user.data._id}).toArray().then((result) => {
+            res.render('chat.ejs', {data : result});
+        })
     }
 }
+
+const middleware = {
+    /** 로그인 했는지 검사하는 미들웨어 */
+      sessionAuth: (req, res, next) => {
+      if (req.user) {
+        next();
+      } 
+      else {
+          res.send('로그인 해주세요');
+      }
+    }
+  }
 
 const pro = {
     /** todo 목록 삭제 */
@@ -73,7 +89,8 @@ const pro = {
     /** todo 목록 수정 */
     update : (req, res)=> {
         let postNum = parseInt(req.params.id);
-        db.collection('post').updateOne({ _id : postNum }, { $set : { 제목: req.body.title, 날짜: req.body.date }}, (err, result) => {
+
+        db.collection('post').updateOne({ _id : postNum }, { $set : { 제목: req.body.title, 내용: req.body.content }}, (err, result) => {
             if(err) console.log(err)
             else {
                 res.redirect('/list');
@@ -84,7 +101,7 @@ const pro = {
     write : (req, res) => {
         db.collection('counter').findOne( {name : '게시물개수' }, (err, result) => {
             let totalPost = result.totalPost;
-            let data = { _id: totalPost + 1, 제목 : req.body.title, 날짜 : req.body.date, 작성자: req.user.data.id };
+            let data = { _id: totalPost + 1, 제목 : req.body.title, 내용 : req.body.content, 작성자: req.user.data.id };
     
             db.collection('post').insertOne(data, (err, data) => {
                 /** update류의 함수를 사용하기 위해서는 operator를 사용해야 함.
@@ -96,10 +113,39 @@ const pro = {
                 });
             });
         })
+    },
+
+    /** chatRoom 발행 */
+    chatRoom : (req, res) => {
+
+        const chatRoomInfo = {
+            title : 'woodz의 채팅방',
+            member : [req.body.ownerId, req.user.data._id],
+            date : new Date()
+          }
+
+        db.collection('chatroom').insertOne(chatRoomInfo).then(function(결과){
+          res.send('저장완료')
+        });
+    },
+
+    message : (req, res) => {
+        
+        let messageInfo = {
+            parent : req.body.parent,
+            content :req.body.content,
+            userId : req.user.data._id,
+            data: new Date()
+        }
+        
+        db.collection('message').insertOne(messageInfo).then(()=>{
+            console.log('DB저장 성공')
+        })
     }
 }
 
 module.exports = {
     output,
+    middleware,
     pro
 }

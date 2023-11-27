@@ -10,19 +10,24 @@
 
     <title>수정</title>
   </head>
-  <body>
+
+   <body>
     <%- include('nav.html') %>
 
 
-      <form action="/list/update/<%=data._id%>?_method=PUT" method="POST">
+      <form action="/list/update/<%=data._id%>" method="POST">
         <div class="form-group ml-4 mr-4 mt-5">
-          <label for="todo">할일</label>
+          <label for="todo">제목</label>
           <input type="text" class="form-control" value = "<%=data.제목%>" id="todo" name = "title" aria-describedby="todoHelp">
         </div>
-        <div class="form-group  ml-4 mr-4">
-          <label for="due-date">Due date</label>
-          <input type="text" class="form-control" name = "date" id="due-date" value = "<%=data.날짜%>">
+
+
+        <div class="form-floating ml-4 mr-4 mt-5">
+          <textarea class="form-control" value = "<%=data.내용%>" name = "content" id="content" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 500px"></textarea>
+          <label for="floatingTextarea2">Comments</label>
         </div>
+
+
         <button type="submit" class="btn btn-primary ml-4">Submit</button>
       </form>
 
